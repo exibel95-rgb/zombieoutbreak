@@ -1,0 +1,10 @@
+# Free web service for the online relay (server/relay.py). Render > New > Blueprint > this repo.
+services:
+  - type: web
+    name: zombieoutbreak-relay
+    runtime: python
+    plan: free
+    buildCommand: "true"
+    startCommand: python3 -I server/relay.py
+    healthCheckPath: /health
+    autoDeploy: true
