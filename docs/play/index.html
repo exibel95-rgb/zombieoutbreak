@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+<title>Zombie Outbreak V7 - Play</title>
+<link rel="icon" type="image/png" href="index.icon.png">
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png">
+<style>
+:root { --bg: #0b0b0d; --panel: #16161a; --line: #2a2a31; --text: #ece7df; --muted: #9a958d; --accent: #ff7a18; --bad: #ff5a4f; }
+html, body, #canvas { margin: 0; padding: 0; border: 0; }
+body { background: var(--bg); color: var(--text); overflow: hidden; touch-action: none;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+#canvas { display: block; }
+#canvas:focus { outline: none; }
+#status { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; padding: 16px; box-sizing: border-box; text-align: center;
+  background: radial-gradient(ellipse at 50% 35%, #2a160b 0%, var(--bg) 70%); }
+#status h1 { margin: 0; font-size: clamp(26px, 6vw, 46px); letter-spacing: .04em; font-weight: 800; }
+#status h1 span { color: var(--accent); }
+.bar { width: min(520px, 90vw); height: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: 99px; overflow: hidden; }
+.bar > div { height: 100%; width: 0%; background: linear-gradient(90deg, #ff9a3c, var(--accent)); transition: width .2s; }
+#label { color: var(--muted); font-size: 14px; min-height: 1.4em; font-variant-numeric: tabular-nums; }
+#tip { color: var(--muted); font-size: 13px; max-width: 520px; line-height: 1.5; }
+#notice { display: none; max-width: 560px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  padding: 18px 20px; line-height: 1.5; font-size: 15px; }
+#notice.bad { border-color: var(--bad); }
+.btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+.btn { display: inline-block; padding: 11px 18px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;
+  text-decoration: none; border: 1px solid var(--line); background: #222228; color: var(--text); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #1a0d03; }
+a.back { position: fixed; top: 12px; left: 16px; color: var(--muted); font-size: 13px; text-decoration: none; }
+</style>
+</head>
+<body>
+<canvas id="canvas">Your browser does not support the canvas tag.</canvas>
+<noscript>This game needs JavaScript.</noscript>
+<div id="status">
+  <a class="back" href="../">&larr; Back</a>
+  <h1>ZOMBIE <span>OUTBREAK</span> V7</h1>
+  <div class="bar" id="barwrap"><div id="bar"></div></div>
+  <div id="label">Starting&hellip;</div>
+  <div id="tip">The first start downloads about 290 MB. After that the game is kept in your browser and starts much faster.</div>
+  <div id="notice"></div>
+</div>
+<script src="index.js"></script>
+<script>
+// V7_WEB_1: the game pack is split into parts under 100 MB (GitHub Pages limit). They are downloaded,
+// kept in the browser's Cache Storage for the next visit, joined in memory and handed to the engine.
+const BUILD = 29;
+const PCK_PARTS = [["pck/part0.bin", 99614720], ["pck/part1.bin", 99614720], ["pck/part2.bin", 55114140]];
+const PCK_TOTAL = PCK_PARTS.reduce((a, p) => a + p[1], 0);
+const WASM_SIZE = 39514754;
+const CACHE_NAME = "zo-v7-pck-" + BUILD + "-" + PCK_TOTAL;
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":"index","experimentalVK":false,"fileSizes":{"index.wasm":WASM_SIZE},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+
+const $ = (id) => document.getElementById(id);
+let wasmDone = 0, pckDone = 0;
+function progress() {
+  const done = wasmDone + pckDone, total = WASM_SIZE + PCK_TOTAL;
+  $("bar").style.width = (100 * done / total).toFixed(1) + "%";
+  $("label").textContent = "Downloading game  " + (done / 1048576).toFixed(0) + " / " + (total / 1048576).toFixed(0) + " MB";
+}
+function notice(html, bad) {
+  const n = $("notice");
+  n.innerHTML = html;
+  n.className = bad ? "bad" : "";
+  n.style.display = "block";
+}
+function fail(err) {
+  console.error(err);
+  $("barwrap").style.display = "none";
+  $("label").textContent = "";
+  notice("<b>The game could not start.</b><br>" + String(err && err.message ? err.message : err).replace(/</g, "&lt;") +
+    "<div class='btns'><a class='btn primary' href=''>Try again</a><a class='btn' href='../#client'>Get the Android client</a></div>", true);
+}
+
+function gpuCheck() {
+  try {
+    const gl = document.createElement("canvas").getContext("webgl2");
+    if (!gl) return "no-webgl2";
+    if (!gl.getExtension("WEBGL_compressed_texture_s3tc")) return "no-s3tc";
+    return "";
+  } catch (e) { return "no-webgl2"; }
+}
+
+async function readInto(resp, out, offset) {
+  if (!resp.body || !resp.body.getReader) {
+    const buf = new Uint8Array(await resp.arrayBuffer());
+    out.set(buf, offset); pckDone += buf.length; progress();
+    return buf.length;
+  }
+  const reader = resp.body.getReader();
+  let n = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    out.set(value, offset + n);
+    n += value.length; pckDone += value.length; progress();
+  }
+  return n;
+}
+
+async function loadPack() {
+  let cache = null;
+  try {
+    cache = await caches.open(CACHE_NAME);
+    for (const key of await caches.keys()) {
+      if (key.startsWith("zo-v7-pck-") && key !== CACHE_NAME) caches.delete(key);
+    }
+  } catch (e) { cache = null; }
+  const out = new Uint8Array(PCK_TOTAL);
+  let offset = 0;
+  for (const [url, size] of PCK_PARTS) {
+    let resp = null;
+    if (cache) { try { resp = await cache.match(url); } catch (e) { resp = null; } }
+    if (!resp) {
+      for (let attempt = 0; attempt < 3 && !resp; attempt++) {
+        try {
+          const r = await fetch(url, { cache: "no-cache" });
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          resp = r;
+        } catch (e) {
+          if (attempt === 2) throw new Error("Download failed (" + url + "): " + e.message);
+          await new Promise((ok) => setTimeout(ok, 1500));
+        }
+      }
+      if (cache) {
+        const copy = resp.clone();
+        cache.put(url, copy).catch(() => {});
+      }
+    }
+    const before = pckDone;
+    const n = await readInto(resp, out, offset);
+    if (n !== size) {
+      if (cache) { try { await cache.delete(url); } catch (e) {} }
+      throw new Error("Part " + url + " was incomplete (" + n + " of " + size + " bytes). Please try again.");
+    }
+    offset += n;
+    pckDone = before + n;
+  }
+  return out;
+}
+
+function start() {
+  $("notice").style.display = "none";
+  $("barwrap").style.display = "block";
+  progress();
+  GODOT_CONFIG.onProgress = (current, total) => { if (current > 0) { wasmDone = current; progress(); } };
+  const engine = new Engine(GODOT_CONFIG);
+  const missing = Engine.getMissingFeatures({ threads: false });
+  if (missing.length) { fail("Your browser is missing: " + missing.join(", ")); return; }
+  Promise.all([engine.init("index"), loadPack()]).then(([, pck]) => {
+    wasmDone = WASM_SIZE; progress();
+    $("label").textContent = "Starting game…";
+    engine.copyToFS("index.pck", pck);
+    return engine.start({ args: ["--main-pack", "index.pck"] });
+  }).then(() => { $("status").remove(); }, fail);
+}
+
+const gpu = gpuCheck();
+if (gpu === "no-webgl2") {
+  $("barwrap").style.display = "none"; $("label").textContent = "";
+  notice("<b>Your browser cannot run 3D games (WebGL 2 is off or missing).</b><br>Try the latest Chrome, Edge or Firefox on a computer." +
+    "<div class='btns'><a class='btn primary' href='../#client'>Get the Android client</a></div>", true);
+} else if (gpu === "no-s3tc") {
+  $("barwrap").style.display = "none"; $("label").textContent = "";
+  notice("<b>This device's browser can't show the game's textures.</b><br>The browser version is made for computers (Windows, Mac, Linux, Chromebook). On an Android phone, the client app runs much better." +
+    "<div class='btns'><a class='btn primary' href='../#client'>Get the Android client</a><button class='btn' id='anyway'>Try anyway</button></div>");
+  $("anyway").onclick = start;
+} else {
+  start();
+}
+</script>
+</body>
+</html>
