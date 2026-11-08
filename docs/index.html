@@ -130,10 +130,10 @@ footer { padding: 32px 0 48px; color: var(--dim); font-size: 13px; border-top: 1
       </a>
       <a class="cta" id="cta-apk" href="#client">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-        <div><b>ANDROID CLIENT</b><span>Download the app &middot; 269 MB</span></div>
+        <div><b>ANDROID CLIENT</b><span>Download the app &middot; 307 MB</span></div>
       </a>
     </div>
-    <p class="note">Version 7.0 build 29 &middot; Public edition</p>
+    <p class="note">Version 7.0 build 30 &middot; Public edition</p>
   </div>
 </header>
 
@@ -182,7 +182,7 @@ footer { padding: 32px 0 48px; color: var(--dim); font-size: 13px; border-top: 1
         <ul>
           <li>Chrome, Edge or Firefox on Windows, Mac, Linux or Chromebook</li>
           <li>Controls: <b>WASD</b> to move, <b>mouse</b> to aim, <b>left click</b> to fire, <b>R</b> reload, <b>Q</b> swap gun, <b>E</b> element box, <b>V</b> camera view, <b>Esc</b> frees the mouse</li>
-          <li>The first start downloads about 290 MB. The browser keeps it, so later starts are quick.</li>
+          <li>The first start downloads about 320 MB. The browser keeps it, so later starts are quick.</li>
           <li>Progress is saved in your browser</li>
         </ul>
         <div class="btn-row"><a class="btn primary" href="play/">&#9654;&nbsp; Play now</a></div>
@@ -196,15 +196,15 @@ footer { padding: 32px 0 48px; color: var(--dim); font-size: 13px; border-top: 1
           <li>Tap <b>Install</b>, then open <b>Zombie Outbreak V7</b></li>
         </ol>
         <div class="btn-row">
-          <button class="btn primary" id="apk-btn" type="button">&#8681;&nbsp; Download APK (269 MB)</button>
+          <button class="btn primary" id="apk-btn" type="button">&#8681;&nbsp; Download APK (307 MB)</button>
         </div>
         <div class="progress" id="apk-progress"><div class="bar"><div id="apk-bar"></div></div><p id="apk-label"></p></div>
         <details>
           <summary>Download not working?</summary>
-          <p>The app is stored in 3 parts. You can download them one by one (<a href="client/apk_part0.bin">part 1</a>, <a href="client/apk_part1.bin">part 2</a>, <a href="client/apk_part2.bin">part 3</a>) and join them. In Termux:</p>
+          <p>The app is stored in 4 parts. You can download them one by one (<a href="client/apk_part0.bin">part 1</a>, <a href="client/apk_part1.bin">part 2</a>, <a href="client/apk_part2.bin">part 3</a>, <a href="client/apk_part3.bin">part 4</a>) and join them. In Termux:</p>
           <pre>cd ~/storage/downloads
-cat apk_part0.bin apk_part1.bin apk_part2.bin &gt; ZombieOutbreak_V7.apk</pre>
-          <p>SHA-256: <code>c42310d40974f0ccde8ef3f54121cf09b8ca0ef41f066af6d16cf079fef6b0ed</code></p>
+cat apk_part0.bin apk_part1.bin apk_part2.bin apk_part3.bin &gt; ZombieOutbreak_V7.apk</pre>
+          <p>SHA-256: <code>8ccc4d1573815253266fa45595b567afd7a5ce6d01b5e9a224d6b73b36860067</code></p>
         </details>
       </div>
     </div>
@@ -221,6 +221,7 @@ cat apk_part0.bin apk_part1.bin apk_part2.bin &gt; ZombieOutbreak_V7.apk</pre>
       <p><b>"Yeti"</b> by orioltron &middot; CC BY 4.0 &middot; <a href="https://sketchfab.com/3d-models/yeti-daa4e743128f44c7859c5c34588518a7">source</a> &middot; rigged onto the werewolf skeleton</p>
       <p><b>Public domain (CC0):</b> Stein Games weapons pack; Quaternius guns, spider and animation library; Flat Guns (OpenGameArt); Lava Golem by gavlig; Forest Monster by CDmir; Cethiel's Dragon by Drummyfish; textures and props from Poly Haven and ambientCG; boss conversions from the ymmo project.</p>
       <p><b>"Giang 20" toad monster</b> by asset-animated (CGTrader, Royalty Free licence).</p>
+      <p><b>"Military zombie set 3"</b> by dima-dyl (CGTrader, Royalty Free licence) &middot; the regular zombies.</p>
       <p>Made with the <a href="https://godotengine.org">Godot Engine</a> (MIT licence). The full list of credits is in the game: tap <b>CREDITS</b> in the lobby.</p>
     </div>
   </div>
@@ -249,7 +250,7 @@ cat apk_part0.bin apk_part1.bin apk_part2.bin &gt; ZombieOutbreak_V7.apk</pre>
 // The APK is stored as 3 parts (GitHub Pages allows files up to 100 MB). Download them, join them in
 // the browser and save the result as one .apk file.
 (function () {
-  const PARTS = [["client/apk_part0.bin", 99614720], ["client/apk_part1.bin", 99614720], ["client/apk_part2.bin", 82634188]];
+  const PARTS = [["client/apk_part0.bin", 99614720], ["client/apk_part1.bin", 99614720], ["client/apk_part2.bin", 99614720], ["client/apk_part3.bin", 22681850]];
   const TOTAL = PARTS.reduce((a, p) => a + p[1], 0);
   const btn = document.getElementById("apk-btn");
   const box = document.getElementById("apk-progress"), bar = document.getElementById("apk-bar"), label = document.getElementById("apk-label");

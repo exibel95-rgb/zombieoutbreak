@@ -15,13 +15,13 @@ The project page is https://exibel95-rgb.github.io/zombieoutbreak/
 | --- | --- |
 | `docs/` | The website (GitHub Pages): landing page, the browser build in `docs/play/` and the Android APK in `docs/client/` |
 | `docs/play/pck/` | The game data, split into parts under 100 MB (GitHub's file limit); the page joins them in the browser |
-| `docs/client/` | The Android APK in 3 parts; the "Download APK" button joins them into one file |
+| `docs/client/` | The Android APK in 4 parts; the "Download APK" button joins them into one file |
 | `server/relay.py` | The online relay server used for worldwide multiplayer rooms (pure Python, no packages) |
 
 Join the APK parts by hand (Termux, Linux or macOS):
 
 ```sh
-cat apk_part0.bin apk_part1.bin apk_part2.bin > ZombieOutbreak_V7.apk
+cat apk_part0.bin apk_part1.bin apk_part2.bin apk_part3.bin > ZombieOutbreak_V7.apk
 ```
 
 ## Online relay server
@@ -42,6 +42,7 @@ PORT=8080 python3 server/relay.py
 - "Yeti" by orioltron, CC BY 4.0, rigged onto the werewolf skeleton: https://sketchfab.com/3d-models/yeti-daa4e743128f44c7859c5c34588518a7
 - Public domain (CC0): Stein Games weapons pack; Quaternius guns, spider and animation library; Flat Guns (OpenGameArt); Lava Golem by gavlig; Forest Monster by CDmir; Cethiel's Dragon by Drummyfish; textures and props from Poly Haven and ambientCG; boss conversions from the ymmo project.
 - "Giang 20" toad monster by asset-animated (CGTrader, Royalty Free licence).
+- "Military zombie set 3" by dima-dyl (CGTrader, Royalty Free licence), the regular zombies.
 - Made with the Godot Engine (MIT licence), https://godotengine.org
 
 CC BY 4.0: https://creativecommons.org/licenses/by/4.0/

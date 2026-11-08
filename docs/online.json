@@ -1,0 +1,4 @@
+{
+  "relay": "wss://zombieoutbreak-relay.onrender.com/ws",
+  "note": "Address of the Zombie Outbreak V7 online relay. The game reads this file at start, so the server can move without a new APK."
+}

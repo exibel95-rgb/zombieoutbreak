@@ -4,7 +4,11 @@ services:
     name: zombieoutbreak-relay
     runtime: python
     plan: free
+    region: frankfurt
     buildCommand: "true"
     startCommand: python3 -I server/relay.py
     healthCheckPath: /health
     autoDeploy: true
+    buildFilter:          # only redeploy when the server itself changes (not for website updates)
+      paths:
+        - server/**
