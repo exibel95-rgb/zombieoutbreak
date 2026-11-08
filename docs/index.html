@@ -61,6 +61,8 @@ section.alt { background: var(--bg2); border-top: 1px solid var(--line); border-
 .gallery figure { margin: 0; position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: #000; }
 .gallery img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16/9; }
 .gallery figure:first-child { grid-row: span 2; }
+.gallery figure.wide { grid-column: span 2; }
+.gallery figure.wide img { aspect-ratio: 21/9; }
 .gallery figcaption { position: absolute; left: 10px; bottom: 10px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
   background: rgba(0,0,0,.65); padding: 4px 10px; border-radius: 6px; }
 
@@ -144,6 +146,7 @@ footer { padding: 32px 0 48px; color: var(--dim); font-size: 13px; border-top: 1
       <figure><img src="img/action.jpg" alt="First-person view: zombies attacking near the element box" loading="lazy"><figcaption>Survival waves</figcaption></figure>
       <figure><img src="img/lobby.jpg" alt="Game lobby with boss preview" loading="lazy"><figcaption>Lobby</figcaption></figure>
       <figure><img src="img/souk.jpg" alt="The Souk 5v5 map" loading="lazy"><figcaption>Souk &middot; 5v5 map</figcaption></figure>
+      <figure class="wide"><img src="img/fenixsl.jpg" alt="FenixSL: a red-painted cave metro station with a wrecked train" loading="lazy"><figcaption>New map &middot; FenixSL metro station</figcaption></figure>
     </div>
   </div>
 </section>
@@ -250,7 +253,7 @@ cat apk_part0.bin apk_part1.bin apk_part2.bin apk_part3.bin &gt; ZombieOutbreak_
 // The APK is stored as 3 parts (GitHub Pages allows files up to 100 MB). Download them, join them in
 // the browser and save the result as one .apk file.
 (function () {
-  const PARTS = [["client/apk_part0.bin", 99614720], ["client/apk_part1.bin", 99614720], ["client/apk_part2.bin", 99614720], ["client/apk_part3.bin", 22681850]];
+  const PARTS = [["client/apk_part0.bin", 99614720], ["client/apk_part1.bin", 99614720], ["client/apk_part2.bin", 99614720], ["client/apk_part3.bin", 64687546]];
   const TOTAL = PARTS.reduce((a, p) => a + p[1], 0);
   const btn = document.getElementById("apk-btn");
   const box = document.getElementById("apk-progress"), bar = document.getElementById("apk-bar"), label = document.getElementById("apk-label");
