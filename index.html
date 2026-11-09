@@ -3,260 +3,609 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zombie Outbreak V7</title>
-<meta name="description" content="Free zombie shooter. Play in your browser or download the Android client. Endless waves, bosses, gunsmith and 5v5 team battles.">
+<title>Zombie Outbreak V7 – free zombie shooter for Android and browser</title>
+<meta name="description" content="Free zombie shooter for Android and your browser. Survive timed waves, slay towering bosses, forge your arsenal and climb from Rookie to Legendary in 5v5 ranked.">
+<link rel="canonical" href="https://exibel95-rgb.github.io/zombieoutbreak/">
 <meta property="og:title" content="Zombie Outbreak V7">
-<meta property="og:description" content="Free zombie shooter - play in your browser or on Android.">
-<meta property="og:image" content="img/share.jpg">
+<meta property="og:description" content="The dead rise. Legends are forged. Free on Android and in your browser.">
+<meta property="og:image" content="https://exibel95-rgb.github.io/zombieoutbreak/img/v2/share.jpg">
+<meta property="og:url" content="https://exibel95-rgb.github.io/zombieoutbreak/">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#0b0b0d">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#120b08">
 <link rel="icon" type="image/png" href="img/icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff" href="fonts/GrenzeGotisch.woff" crossorigin>
+<link rel="preload" as="image" href="img/v2/hero_drake.jpg">
 <style>
+/* Fonts (SIL Open Font Licence, see fonts/OFL-*.txt), self-hosted and subset to Latin */
+@font-face { font-family: "Grenze Gotisch"; src: url(fonts/GrenzeGotisch.woff) format("woff"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "Alegreya Sans"; src: url(fonts/AlegreyaSans-Regular.woff) format("woff"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Alegreya Sans"; src: url(fonts/AlegreyaSans-Medium.woff) format("woff"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Alegreya Sans"; src: url(fonts/AlegreyaSans-Bold.woff) format("woff"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Alegreya Sans"; src: url(fonts/AlegreyaSans-Italic.woff) format("woff"); font-weight: 400; font-style: italic; font-display: swap; }
 :root {
-  --bg: #0b0b0d; --bg2: #121216; --panel: #17171c; --line: #2a2a31;
-  --text: #ece7df; --muted: #a39e95; --dim: #6f6b65;
-  --accent: #ff7a18; --accent2: #ffb347; --ok: #6fd18a;
+  --char: #120b08;     /* soot */
+  --char-2: #1c120d;   /* raised soot */
+  --char-3: #0b0605;   /* plate black */
+  --bone: #efe6d8;     /* text */
+  --ash: #a3978a;      /* muted text */
+  --ember: #ff6b1f;    /* fire accent */
+  --gold: #f0b54a;     /* molten gold: buttons, frames */
+  --blood: #c0392b;
+  --frame: rgba(240, 181, 74, .30);
+  --frame-soft: rgba(240, 181, 74, .14);
+  --display: "Grenze Gotisch", "UnifrakturCook", Georgia, serif;
+  --body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 Inter, system-ui, sans-serif; }
-a { color: var(--accent2); }
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
-h1, h2, h3 { font-family: Oswald, Impact, sans-serif; letter-spacing: .02em; line-height: 1.1; margin: 0; }
-h2 { font-size: clamp(28px, 4vw, 40px); margin-bottom: 18px; }
-h2 small { display: block; font: 600 12px/1 Inter, sans-serif; letter-spacing: .18em; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; }
-
-/* hero */
-.hero { position: relative; overflow: hidden; padding: 28px 0 56px;
-  background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,110,20,.22), transparent 70%), var(--bg); }
-.hero .banner { display: block; width: min(1000px, 100%); margin: 0 auto 8px; height: auto; aspect-ratio: 1432 / 272; object-fit: cover;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%), linear-gradient(180deg, transparent 0, #000 25%, #000 72%, transparent 100%);
-  -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%), linear-gradient(180deg, transparent 0, #000 25%, #000 72%, transparent 100%);
-  mask-composite: intersect; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; color: var(--bone); font: 400 18px/1.62 var(--body); font-variant-numeric: lining-nums;
+  background: radial-gradient(1100px 520px at 78% -6%, rgba(255, 107, 31, .10), transparent 62%), var(--char);
+  overflow-x: hidden;
+}
+img { max-width: 100%; }
+a { color: var(--gold); text-underline-offset: 3px; }
+a:hover { color: var(--ember); }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 720px) { .wrap { padding: 0 28px; } }
+h1, h2, h3 { font-family: var(--display); font-weight: 800; line-height: 1.02; letter-spacing: .004em; margin: 0; }
+h2 { font-size: clamp(38px, 5.4vw, 64px); }
+h3 { font-size: clamp(26px, 2.8vw, 34px); }
+p { margin: 0 0 14px; }
+.lead { color: #d8cdbd; font-size: clamp(18px, 1.6vw, 21px); max-width: 60ch; margin-top: 14px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.hero .wrap { position: relative; z-index: 1; width: 100%; text-align: center; }
-.hero .ctas { justify-content: center; }
-.tag { display: inline-flex; gap: 8px; align-items: center; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--accent2); background: rgba(0,0,0,.45); border: 1px solid rgba(255,122,24,.35); padding: 6px 12px; border-radius: 99px; }
-.hero p.lead { max-width: 600px; margin-left: auto !important; margin-right: auto !important; font-size: clamp(16px, 2.2vw, 19px); color: #d8d2c8; margin: 0 0 28px; text-shadow: 0 2px 12px rgba(0,0,0,.7); }
-.ctas { display: flex; flex-wrap: wrap; gap: 14px; }
-.cta { display: flex; align-items: center; gap: 14px; padding: 16px 22px; border-radius: 14px; text-decoration: none; color: var(--text);
-  background: rgba(23,23,28,.85); border: 1px solid var(--line); backdrop-filter: blur(6px); min-width: 250px; transition: transform .15s, border-color .15s; }
-.cta:hover { transform: translateY(-2px); border-color: var(--accent); }
-.cta svg { width: 30px; height: 30px; flex: none; }
-.cta b { display: block; font-family: Oswald, sans-serif; font-size: 21px; letter-spacing: .03em; font-weight: 700; }
-.cta span { font-size: 13px; color: var(--muted); }
-.cta.primary { background: var(--accent); border-color: var(--accent); color: #1b0e03; }
-.cta.primary span { color: #4a2507; }
-.note { margin-top: 16px; font-size: 13px; color: var(--muted); }
+.skip { position: absolute; left: 12px; top: -48px; z-index: 50; background: var(--gold); color: #1a0f08; padding: 8px 14px; border-radius: 3px; font-weight: 700; }
+.skip:focus { top: 12px; }
 
-section { padding: 72px 0; }
-section.alt { background: var(--bg2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-
-/* gallery */
-.gallery { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 12px; }
-.gallery figure { margin: 0; position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: #000; }
-.gallery img { display: block; width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16/9; }
-.gallery figure:first-child { grid-row: span 2; }
-.gallery figure.wide { grid-column: span 2; }
-.gallery figure.wide img { aspect-ratio: 21/9; }
-.gallery figcaption { position: absolute; left: 10px; bottom: 10px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
-  background: rgba(0,0,0,.65); padding: 4px 10px; border-radius: 6px; }
-
-/* features */
-.features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-.feat { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
-.feat h3 { font-size: 20px; margin: 10px 0 6px; }
-.feat p { margin: 0; color: var(--muted); font-size: 14px; }
-.feat .ico { width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center; background: rgba(255,122,24,.12); color: var(--accent); }
-.feat .ico svg { width: 20px; height: 20px; }
-
-/* platforms */
-.platforms { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.plat { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 26px; display: flex; flex-direction: column; }
-.plat h3 { font-size: 26px; margin-bottom: 4px; }
-.plat .sub { color: var(--muted); font-size: 14px; margin-bottom: 18px; }
-.plat ul, .plat ol { margin: 0 0 20px; padding-left: 20px; color: #cfc9bf; font-size: 15px; }
-.plat li { margin: 4px 0; }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 13px 20px; border-radius: 11px; font-weight: 600; font-size: 15px;
-  text-decoration: none; border: 1px solid var(--line); background: #22222a; color: var(--text); cursor: pointer; font-family: inherit; }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #1b0e03; }
-.btn:disabled { opacity: .6; cursor: default; }
-.btn-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
-.progress { display: none; margin-top: 14px; }
-.progress .bar { height: 10px; background: #0d0d10; border: 1px solid var(--line); border-radius: 99px; overflow: hidden; }
-.progress .bar div { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent2), var(--accent)); }
-.progress p { margin: 6px 0 0; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-details { margin-top: 16px; font-size: 14px; color: var(--muted); }
-details summary { cursor: pointer; color: #cfc9bf; }
-code { background: #0d0d10; border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; font-size: 13px; word-break: break-all; }
-pre { background: #0d0d10; border: 1px solid var(--line); border-radius: 8px; padding: 12px; overflow-x: auto; font-size: 12.5px; color: #d8d2c8; }
-
-/* credits */
-.credits { columns: 2; column-gap: 32px; font-size: 14px; color: var(--muted); }
-.credits p { margin: 0 0 10px; break-inside: avoid; }
-.credits b { color: #d8d2c8; font-weight: 600; }
-footer { padding: 32px 0 48px; color: var(--dim); font-size: 13px; border-top: 1px solid var(--line); }
-
-@media (max-width: 860px) {
-  .features { grid-template-columns: 1fr 1fr; }
-  .platforms { grid-template-columns: 1fr; }
-  .gallery { grid-template-columns: 1fr 1fr; }
-  .gallery figure:first-child { grid-column: span 2; grid-row: auto; }
-  .credits { columns: 1; }
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 12px; min-height: 54px; padding: 10px 22px;
+  border-radius: 3px; border: 1px solid transparent; font: 700 17px/1.15 var(--body); text-decoration: none;
+  cursor: pointer; transition: transform .15s ease, box-shadow .2s ease, background-color .2s ease;
 }
-@media (max-width: 520px) {
-  .features { grid-template-columns: 1fr; }
-  .cta { min-width: 0; width: 100%; }
-  .gallery { grid-template-columns: 1fr; }
-  .gallery figure:first-child { grid-column: auto; }
-  section { padding: 52px 0; }
+.btn svg { width: 22px; height: 22px; flex: none; }
+.btn small { display: block; font-weight: 500; font-size: 13px; opacity: .78; margin-top: 2px; }
+.btn.gold { background: linear-gradient(180deg, #ffd27a 0%, #f0b54a 46%, #d9822b 100%); color: #1d1007; box-shadow: 0 10px 28px -12px rgba(255, 120, 30, .8), inset 0 1px 0 rgba(255, 255, 255, .45); }
+.btn.gold:hover { color: #1d1007; transform: translateY(-1px); box-shadow: 0 14px 34px -12px rgba(255, 120, 30, .95), inset 0 1px 0 rgba(255, 255, 255, .5); }
+.btn.line { background: rgba(18, 11, 8, .55); color: var(--bone); border-color: rgba(255, 107, 31, .75); }
+.btn.line:hover { color: var(--bone); background: rgba(255, 107, 31, .14); }
+.btn:disabled { opacity: .55; cursor: progress; transform: none; }
+
+/* ---------- top bar ---------- */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 40; transition: background-color .3s ease, border-color .3s ease; border-bottom: 1px solid transparent; }
+.nav.solid { background: rgba(14, 8, 6, .92); border-bottom-color: var(--frame-soft); backdrop-filter: blur(8px); }
+.nav .wrap { display: flex; align-items: center; gap: 18px; height: 64px; }
+.mark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--bone); font: 800 22px/1 var(--display); }
+.mark img { width: 34px; height: 34px; border-radius: 6px; }
+.nav ul { display: flex; gap: 22px; list-style: none; margin: 0 0 0 auto; padding: 0; }
+.nav ul a { color: #d8cdbd; text-decoration: none; font-weight: 500; font-size: 16px; }
+.nav ul a:hover { color: var(--gold); }
+.nav .btn { min-height: 40px; padding: 6px 16px; font-size: 15px; white-space: nowrap; }
+.menu-btn { display: none; margin-left: auto; background: none; border: 1px solid var(--frame); color: var(--bone); border-radius: 3px; height: 40px; padding: 0 14px; font: 500 15px var(--body); }
+@media (max-width: 900px) {
+  .nav ul { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(14, 8, 6, .97); border-bottom: 1px solid var(--frame-soft); padding: 6px 16px 14px; }
+  .nav ul.open { display: flex; }
+  .nav ul a { display: block; padding: 11px 0; font-size: 18px; border-bottom: 1px solid rgba(240, 181, 74, .08); }
+  .menu-btn { display: inline-block; }
+  .nav .btn { margin-left: 0; }
 }
+@media (max-width: 480px) { .mark span { display: none; } .nav .wrap { gap: 10px; } }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative; isolation: isolate; overflow: hidden; min-height: 100vh; min-height: min(100svh, 1000px);
+  display: flex; align-items: flex-end; padding: 120px 0 clamp(56px, 9vh, 104px);
+  background: #090403 url(img/v2/hero_drake.jpg) 64% 38% / cover no-repeat;
+}
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(18, 11, 8, .97) 0%, rgba(18, 11, 8, .86) 30%, rgba(18, 11, 8, .35) 58%, rgba(18, 11, 8, 0) 78%),
+    linear-gradient(0deg, var(--char) 0%, rgba(18, 11, 8, 0) 34%);
+}
+#embers { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.hero > .wrap { width: 100%; }
+.hero-copy { max-width: 620px; }
+.hero .logo { display: block; width: min(600px, 100%); height: auto; filter: drop-shadow(0 8px 34px rgba(255, 90, 20, .38)); }
+.hero h1 { font-size: clamp(46px, 6.6vw, 92px); margin-top: 22px; text-shadow: 0 2px 24px rgba(0, 0, 0, .65); max-width: 13ch; }
+.hero .lead { color: #e6dccd; text-shadow: 0 1px 12px rgba(0, 0, 0, .7); }
+.ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+.fineprint { color: var(--ash); font-size: 15px; margin-top: 18px; }
+@media (max-width: 720px) {
+  .hero { background-position: 70% 30%; min-height: 100svh; }
+  .hero::before { background: linear-gradient(0deg, var(--char) 14%, rgba(18, 11, 8, .78) 52%, rgba(18, 11, 8, .25) 100%); }
+  .ctas .btn { width: 100%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero .logo { animation: ignite 2.2s ease-out both; }
+  .hero h1, .hero .lead, .hero .ctas, .hero .fineprint { animation: rise .9s ease-out both; }
+  .hero h1 { animation-delay: .5s; } .hero .lead { animation-delay: .7s; } .hero .ctas { animation-delay: .9s; } .hero .fineprint { animation-delay: 1.05s; }
+}
+@keyframes ignite {
+  0% { opacity: 0; filter: brightness(.15) drop-shadow(0 0 0 rgba(255, 90, 20, 0)); }
+  55% { opacity: 1; filter: brightness(1.7) drop-shadow(0 0 46px rgba(255, 110, 30, .9)); }
+  100% { opacity: 1; filter: brightness(1) drop-shadow(0 8px 34px rgba(255, 90, 20, .38)); }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+/* ---------- sections + the one ornament ---------- */
+section.block { padding: clamp(72px, 10vw, 136px) 0 0; }
+.flourish { display: block; width: min(420px, 70%); height: 24px; margin: clamp(56px, 8vw, 96px) auto 0; color: var(--gold); opacity: .55; }
+.head { max-width: 760px; }
+
+/* modes: alternating rows */
+.modes { display: grid; gap: clamp(48px, 7vw, 92px); margin-top: clamp(40px, 6vw, 72px); }
+.mode { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(22px, 4vw, 60px); align-items: center; }
+.mode:nth-child(even) { grid-template-columns: 1fr 1.3fr; }
+.mode:nth-child(even) .media { order: 2; }
+.mode h3 { margin-bottom: 12px; }
+.media img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--frame); box-shadow: 0 30px 60px -36px rgba(0, 0, 0, .9); }
+.mode p { color: #d8cdbd; }
+.facts { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 8px; }
+.facts li { padding-left: 22px; position: relative; color: var(--bone); }
+.facts li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 8px; height: 8px; background: var(--ember); transform: rotate(45deg); box-shadow: 0 0 10px rgba(255, 107, 31, .8); }
+@media (max-width: 860px) { .mode, .mode:nth-child(even) { grid-template-columns: 1fr; } .mode:nth-child(even) .media { order: 0; } }
+
+/* ranks: podium ladder */
+.ladder-scroll { margin-top: clamp(36px, 5vw, 60px); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; }
+.ladder { display: grid; grid-template-columns: repeat(7, minmax(112px, 1fr)); gap: 10px; align-items: end; min-width: 800px; list-style: none; margin: 0; padding: 0; }
+.step { scroll-snap-align: start; text-align: center; }
+.step img { display: block; width: 100%; max-width: 168px; margin: 0 auto -4px; aspect-ratio: 1; height: auto; }
+.plinth {
+  height: calc(66px + var(--i) * 22px); border: 1px solid var(--frame); border-bottom: 0; background: #1a110c;
+  border-color: color-mix(in srgb, var(--c) 55%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c) 22%, #1c120d) 0%, #140c09 100%);
+  border-radius: 3px 3px 0 0; padding-top: 10px;
+}
+.plinth b { display: block; font: 800 clamp(20px, 1.8vw, 24px)/1 var(--display); color: var(--c); }
+.plinth span { display: block; font-size: 14px; color: var(--ash); margin-top: 4px; }
+.ladder-base { height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: .5; min-width: 800px; }
+.rules { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 4vw, 56px); margin-top: clamp(40px, 5vw, 64px); align-items: center; }
+.rules dl { margin: 0; display: grid; gap: 18px; }
+.rules dt { font: 800 24px/1.1 var(--display); color: var(--gold); }
+.rules dd { margin: 4px 0 0; color: #d8cdbd; }
+@media (max-width: 860px) { .rules { grid-template-columns: 1fr; } }
+
+/* bestiary: grimoire plates (the signature element) */
+.bestiary { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-top: clamp(36px, 5vw, 60px); }
+.plate {
+  position: relative; margin: 0; padding: 8px 8px 14px; background: var(--char-3); border: 1px solid var(--frame);
+  border-radius: 3px; transition: transform .2s ease, border-color .2s ease, box-shadow .25s ease;
+}
+.plate::after { content: ""; position: absolute; inset: 4px; border: 1px solid var(--frame-soft); border-radius: 2px; pointer-events: none; }
+.plate img { display: block; width: 100%; aspect-ratio: 4 / 5; height: auto; object-fit: cover; border-radius: 2px; }
+.plate h3 { font-size: 25px; margin: 12px 6px 4px; }
+.plate p { margin: 0 6px; font-style: italic; color: var(--ash); font-size: 16px; line-height: 1.4; }
+.plate:hover, .plate:focus-within { transform: translateY(-4px); border-color: rgba(255, 107, 31, .85); box-shadow: 0 0 0 1px rgba(255, 107, 31, .35), 0 24px 48px -24px rgba(255, 90, 20, .7); }
+@media (max-width: 1100px) { .bestiary { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) {
+  .bestiary { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: 72%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+  .plate { scroll-snap-align: start; }
+}
+
+/* arsenal */
+.arsenal { display: grid; grid-template-columns: 1fr 1.25fr; gap: clamp(28px, 4vw, 64px); align-items: center; margin-top: clamp(32px, 4vw, 48px); }
+.arsenal dl { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 28px; margin: 26px 0 0; }
+.arsenal dt { font: 800 34px/1 var(--display); color: var(--gold); }
+.arsenal dd { margin: 4px 0 0; color: #d8cdbd; font-size: 16px; }
+@media (max-width: 860px) { .arsenal { grid-template-columns: 1fr; } }
+
+/* battlefields */
+.fields { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: clamp(36px, 5vw, 60px); }
+.field { position: relative; margin: 0; overflow: hidden; border-radius: 4px; border: 1px solid var(--frame); }
+.field img { display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; object-fit: cover; }
+.field figcaption { position: absolute; inset: auto 0 0 0; padding: 48px 18px 14px; background: linear-gradient(0deg, rgba(10, 6, 4, .92), rgba(10, 6, 4, 0)); }
+.field b { display: block; font: 800 30px/1 var(--display); }
+.field span { color: #d8cdbd; font-size: 16px; }
+@media (max-width: 720px) { .fields { grid-template-columns: 1fr; } }
+
+/* download */
+.client-shot { margin: clamp(32px, 4vw, 48px) 0 0; max-width: 900px; }
+.client-shot img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--frame); box-shadow: 0 30px 60px -36px rgba(0, 0, 0, .9); }
+.client-shot figcaption { color: var(--ash); font-size: 15px; margin-top: 10px; font-style: italic; }
+.altar { display: grid; grid-template-columns: 1fr 1fr; margin-top: clamp(36px, 5vw, 56px); border: 1px solid var(--frame); border-radius: 4px; background: linear-gradient(180deg, var(--char-2), #140c09); }
+.altar > div { padding: clamp(22px, 3.2vw, 44px); }
+.altar > div + div { border-left: 1px solid var(--frame-soft); }
+.altar h3 { margin-bottom: 6px; }
+.altar .sub { color: var(--ash); margin-bottom: 18px; }
+.altar ul, .altar ol { padding-left: 22px; margin: 0 0 24px; color: #d8cdbd; }
+.altar li { margin-bottom: 7px; }
+.altar kbd { font: 600 14px var(--body); border: 1px solid var(--frame); border-bottom-width: 2px; border-radius: 3px; padding: 0 6px; color: var(--bone); }
+.progress { display: none; margin-top: 16px; }
+.bar { height: 10px; background: rgba(255, 255, 255, .07); border-radius: 5px; overflow: hidden; border: 1px solid var(--frame-soft); }
+.bar div { height: 100%; width: 0; background: linear-gradient(90deg, #d9822b, #ffd27a); transition: width .2s; }
+.progress p { font-size: 15px; color: var(--ash); margin: 8px 0 0; }
+details { margin-top: 18px; color: #d8cdbd; }
+summary { cursor: pointer; color: var(--gold); font-weight: 500; }
+pre { background: var(--char-3); border: 1px solid var(--frame-soft); border-radius: 3px; padding: 12px 14px; overflow-x: auto; font: 14px/1.5 ui-monospace, "SFMono-Regular", Menlo, monospace; color: var(--bone); }
+code { font: 13px ui-monospace, Menlo, monospace; word-break: break-all; color: var(--bone); }
+@media (max-width: 860px) { .altar { grid-template-columns: 1fr; } .altar > div + div { border-left: 0; border-top: 1px solid var(--frame-soft); } }
+
+/* updates timeline (a real sequence) */
+.timeline { list-style: none; margin: clamp(32px, 4vw, 48px) 0 0; padding: 0 0 0 26px; border-left: 1px solid var(--frame); max-width: 820px; }
+.timeline li { position: relative; padding: 0 0 30px 6px; }
+.timeline li::before { content: ""; position: absolute; left: -33px; top: 8px; width: 12px; height: 12px; transform: rotate(45deg); background: var(--char); border: 1px solid var(--gold); }
+.timeline li:first-child::before { background: var(--ember); border-color: var(--ember); box-shadow: 0 0 12px rgba(255, 107, 31, .9); }
+.timeline h3 { font-size: 26px; }
+.timeline time { color: var(--ash); font-size: 15px; }
+.timeline p { color: #d8cdbd; margin-top: 6px; }
+
+/* faq + credits */
+.faq { max-width: 820px; margin-top: clamp(28px, 4vw, 44px); }
+.faq details { border-top: 1px solid var(--frame-soft); padding: 16px 0; margin: 0; }
+.faq details:last-child { border-bottom: 1px solid var(--frame-soft); }
+.faq summary { font: 800 24px/1.2 var(--display); color: var(--bone); list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; color: var(--gold); font-family: var(--body); font-weight: 400; }
+.faq details[open] summary::after { content: "−"; }
+.faq p { margin: 10px 0 0; }
+.credits { color: var(--ash); font-size: 15px; max-width: 900px; margin-top: 24px; }
+.credits p { margin-bottom: 10px; }
+.credits b { color: #d8cdbd; font-weight: 500; }
+footer { margin-top: clamp(72px, 9vw, 120px); padding: 34px 0 42px; border-top: 1px solid var(--frame-soft); color: var(--ash); font-size: 15px; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: space-between; }
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<header class="hero">
+<header class="nav" id="nav">
   <div class="wrap">
-    <img class="banner" src="img/logo_banner.jpg" alt="" width="1432" height="272">
-    <h1 class="sr">Zombie Outbreak V7</h1>
-    <span class="tag">Free to play &middot; Browser &amp; Android</span>
-    <p class="lead" style="margin-top:18px">Hold the street against endless waves, take down giant bosses, tune your guns in the Gunsmith, and fight 5v5 team battles.</p>
-    <div class="ctas">
-      <a class="cta" id="cta-play" href="play/">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
-        <div><b>PLAY IN BROWSER</b><span>Windows &middot; Mac &middot; Linux &middot; Chromebook</span></div>
-      </a>
-      <a class="cta" id="cta-apk" href="#client">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-        <div><b>ANDROID CLIENT</b><span>Download the app &middot; 307 MB</span></div>
-      </a>
-    </div>
-    <p class="note">Version 7.0 build 30 &middot; Public edition</p>
+    <a class="mark" href="#top" aria-label="Zombie Outbreak V7, back to top"><img src="img/icon.png" alt="" width="34" height="34"><span>Zombie Outbreak</span></a>
+    <ul id="menu">
+      <li><a href="#modes">Modes</a></li>
+      <li><a href="#ranks">Ranks</a></li>
+      <li><a href="#bestiary">Bestiary</a></li>
+      <li><a href="#arsenal">Arsenal</a></li>
+      <li><a href="#maps">Battlefields</a></li>
+      <li><a href="#client">Download</a></li>
+    </ul>
+    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+    <a class="btn gold" href="play/">Play free</a>
   </div>
 </header>
 
-<section>
+<section class="hero" id="top">
+  <canvas id="embers" aria-hidden="true"></canvas>
   <div class="wrap">
-    <h2><small>Screenshots</small>Into the outbreak</h2>
-    <div class="gallery">
-      <figure><img src="img/action.jpg" alt="First-person view: zombies attacking near the element box" loading="lazy"><figcaption>Survival waves</figcaption></figure>
-      <figure><img src="img/lobby.jpg" alt="Game lobby with boss preview" loading="lazy"><figcaption>Lobby</figcaption></figure>
-      <figure><img src="img/souk.jpg" alt="The Souk 5v5 map" loading="lazy"><figcaption>Souk &middot; 5v5 map</figcaption></figure>
-      <figure class="wide"><img src="img/fenixsl.jpg" alt="FenixSL: a red-painted cave metro station with a wrecked train" loading="lazy"><figcaption>New map &middot; FenixSL metro station</figcaption></figure>
+    <div class="hero-copy">
+      <img class="logo" src="img/v2/logo.png" alt="Zombie Outbreak V7" width="916" height="146">
+      <h1>The dead rise. Legends are forged.</h1>
+      <p class="lead">A free zombie shooter for Android and your browser. Hold the line through timed waves, bring down towering monsters, and climb from Rookie to Legendary in 5v5 ranked.</p>
+      <div class="ctas">
+        <a class="btn gold" id="cta-play" href="play/">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+          <span>Play in your browser<small>Windows, Mac, Linux, Chromebook</small></span>
+        </a>
+        <a class="btn line" id="cta-apk" href="#client">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          <span>Download for Android<small id="cta-apk-size">The full game in one APK</small></span>
+        </a>
+      </div>
+      <p class="fineprint">Free to play with no account needed. Version <span class="ver">7.0 build 33</span>.</p>
     </div>
   </div>
 </section>
 
-<section class="alt">
-  <div class="wrap">
-    <h2><small>What's inside</small>Built for quick, loud matches</h2>
-    <div class="features">
-      <div class="feat">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
-        <h3>Survival waves</h3><p>Beat the clock: survive each timed wave as smarter hordes flank you from every side. Runners, spitters, elites and a boss every five waves.</p>
-      </div>
-      <div class="feat">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 1.8 6 5.5"/></svg></div>
-        <h3>5v5 ranked</h3><p>Team Deathmatch, Element Core, Boss Hunt and Horde Wars with bots filling empty slots. Climb from Rookie to Legendary in 2-month ranked series.</p>
-      </div>
-      <div class="feat">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></div>
-        <h3>Gunsmith</h3><p>50+ guns, 40 attachments, weapon levels 1&ndash;30 and camos from Bronze to Diamond.</p>
-      </div>
-      <div class="feat">
-        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
-        <h3>Element box</h3><p>Fire, ice and lightning upgrades for your weapon, right in the middle of the fight.</p>
-      </div>
-    </div>
-  </div>
-</section>
+<main id="main">
 
-<section id="client">
+<section class="block" id="modes">
   <div class="wrap">
-    <h2><small>Get the game</small>Choose how you play</h2>
-    <div class="platforms">
-      <div class="plat" id="plat-web">
-        <h3>Browser</h3>
-        <div class="sub">No install. Best on a computer.</div>
-        <ul>
-          <li>Chrome, Edge or Firefox on Windows, Mac, Linux or Chromebook</li>
-          <li>Controls: <b>WASD</b> to move, <b>mouse</b> to aim, <b>left click</b> to fire, <b>R</b> reload, <b>Q</b> swap gun, <b>E</b> element box, <b>V</b> camera view, <b>Esc</b> frees the mouse</li>
-          <li>The first start downloads about 320 MB. The browser keeps it, so later starts are quick.</li>
-          <li>Progress is saved in your browser</li>
-        </ul>
-        <div class="btn-row"><a class="btn primary" href="play/">&#9654;&nbsp; Play now</a></div>
-      </div>
-      <div class="plat" id="plat-apk">
-        <h3>Android client</h3>
-        <div class="sub">Full speed on your phone &middot; Android 7 or newer &middot; 64-bit</div>
-        <ol>
-          <li>Tap <b>Download APK</b> below and wait for it to finish</li>
-          <li>Open the file. If Android asks, allow <b>Install unknown apps</b> for your browser.</li>
-          <li>Tap <b>Install</b>, then open <b>Zombie Outbreak V7</b></li>
-        </ol>
-        <div class="btn-row">
-          <button class="btn primary" id="apk-btn" type="button">&#8681;&nbsp; Download APK (307 MB)</button>
+    <div class="head">
+      <h2>Three ways to fight</h2>
+      <p class="lead">Survive the horde alone, hold it back with friends, or take on another team.</p>
+    </div>
+    <div class="modes">
+      <article class="mode">
+        <div class="media"><img src="img/v2/play_godstren.jpg" alt="First-person view: a survivor with an M4 carbine at the element box while zombies close in at night" width="1280" height="720" loading="lazy"></div>
+        <div>
+          <h3>Survive the clock</h3>
+          <p>Every wave is a countdown. Hold out until it reaches zero while the horde flanks you, lunges at you and climbs the kerbs to reach you. Runners and spitters arrive from the second wave, and every fifth wave brings a boss.</p>
+          <ul class="facts">
+            <li>Waves last from 45 to 100 seconds</li>
+            <li>Up to 24 zombies on you at once</li>
+            <li>Ten mutant types plus toad monsters</li>
+          </ul>
         </div>
-        <div class="progress" id="apk-progress"><div class="bar"><div id="apk-bar"></div></div><p id="apk-label"></p></div>
+      </article>
+      <article class="mode">
+        <div class="media"><img src="img/v2/play_fenixsl.jpg" alt="The FenixSL metro station: a red-painted bedrock vault over the platform and a wrecked train" width="1280" height="720" loading="lazy"></div>
+        <div>
+          <h3>Fight side by side</h3>
+          <p>Bring up to four friends into the same waves. One of you hosts on your home Wi-Fi and the others join by IP. Everyone keeps their own guns, levels and loadout.</p>
+          <ul class="facts">
+            <li>Up to five survivors</li>
+            <li>Shared waves and bosses</li>
+            <li>Worldwide online rooms are on the way</li>
+          </ul>
+        </div>
+      </article>
+      <article class="mode">
+        <div class="media"><img src="img/v2/play_5v5.jpg" alt="A 5v5 Team Deathmatch on the Dockyard map, 10 to 7, with the kill feed on the right" width="1280" height="720" loading="lazy"></div>
+        <div>
+          <h3>Win it as a team</h3>
+          <p>Team Deathmatch, Element Core, Boss Hunt and Horde Wars. Bots fill every empty slot, so a full match starts the moment you tap play.</p>
+          <ul class="facts">
+            <li>Four modes, ten-minute matches</li>
+            <li>Ranked or classic</li>
+            <li>Every map is open for 5v5</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<svg class="flourish" viewBox="0 0 420 24" aria-hidden="true"><path d="M0 12h176M244 12h176" stroke="currentColor" stroke-width="1"/><path d="M210 2l10 10-10 10-10-10z" fill="none" stroke="currentColor"/><path d="M210 7l5 5-5 5-5-5z" fill="currentColor"/><circle cx="186" cy="12" r="2" fill="currentColor"/><circle cx="234" cy="12" r="2" fill="currentColor"/></svg>
+
+<section class="block" id="ranks">
+  <div class="wrap">
+    <div class="head">
+      <h2>Rise from Rookie to Legendary</h2>
+      <p class="lead">Ranked 5v5 matches earn you Rank Points. Your place in the team, MVP and win streaks add more, and a strong game takes the sting out of a loss.</p>
+    </div>
+    <div class="ladder-scroll" role="region" aria-label="The seven ranks, lowest to highest" tabindex="0">
+      <ol class="ladder">
+        <li class="step" style="--i:0;--c:#e0a46e"><img src="img/v2/ranks/rookie.png" alt="" width="256" height="256" loading="lazy"><div class="plinth"><b>Rookie</b><span>from 0 RP</span></div></li>
+        <li class="step" style="--i:1;--c:#c9d6e0"><img src="img/v2/ranks/veteran.png" alt="" width="256" height="256" loading="lazy"><div class="plinth"><b>Veteran</b><span>from 1,000 RP</span></div></li>
+        <li class="step" style="--i:2;--c:#ffcf4d"><img src="img/v2/ranks/elite.png" alt="" width="256" height="256" loading="lazy"><div class="plinth"><b>Elite</b><span>from 2,000 RP</span></div></li>
+        <li class="step" style="--i:3;--c:#86e8ff"><img src="img/v2/ranks/pro.png" alt="" width="256" height="256" loading="lazy"><div class="plinth"><b>Pro</b><span>from 3,000 RP</span></div></li>
+        <li class="step" style="--i:4;--c:#b996ff"><img src="img/v2/ranks/master.png" alt="" width="256" height="256" loading="lazy"><div class="plinth"><b>Master</b><span>from 4,500 RP</span></div></li>
+        <li class="step" style="--i:5;--c:#ff7262"><img src="img/v2/ranks/grandmaster.png" alt="" width="256" height="256" loading="lazy"><div class="plinth"><b>Grandmaster</b><span>from 6,000 RP</span></div></li>
+        <li class="step" style="--i:6;--c:#ffc23a"><img src="img/v2/ranks/legendary.png" alt="" width="256" height="256" loading="lazy"><div class="plinth"><b>Legendary</b><span>8,000 RP and up</span></div></li>
+      </ol>
+      <div class="ladder-base"></div>
+    </div>
+    <div class="rules">
+      <dl>
+        <div><dt>Tiers to climb</dt><dd>Rookie, Veteran, Elite and Pro each have five tiers, I to V. Master, Grandmaster and Legendary are earned as one.</dd></div>
+        <div><dt>Promotion shield</dt><dd>Every new tier shields you from your next loss, and you never fall out of a rank once you reach it.</dd></div>
+        <div><dt>Ranked series</dt><dd>A new series starts every two months. Your rank steps back and you are paid in Parts for how high you climbed.</dd></div>
+        <div><dt>Bots at your level</dt><dd>Ranked bots carry ranks close to yours and sharpen their aim as you climb.</dd></div>
+      </dl>
+      <div class="media"><img src="img/v2/ranked_end.jpg" alt="The end of a ranked match: a promotion to Elite IV with the Rank Points breakdown" width="1280" height="720" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<svg class="flourish" viewBox="0 0 420 24" aria-hidden="true"><path d="M0 12h176M244 12h176" stroke="currentColor" stroke-width="1"/><path d="M210 2l10 10-10 10-10-10z" fill="none" stroke="currentColor"/><path d="M210 7l5 5-5 5-5-5z" fill="currentColor"/><circle cx="186" cy="12" r="2" fill="currentColor"/><circle cx="234" cy="12" r="2" fill="currentColor"/></svg>
+
+<section class="block" id="bestiary">
+  <div class="wrap">
+    <div class="head">
+      <h2>The bestiary</h2>
+      <p class="lead">Every fifth wave, something bigger walks out of the smoke.</p>
+    </div>
+    <div class="bestiary">
+      <figure class="plate" tabindex="0"><img src="img/v2/boss_werewolf.jpg" alt="The Werewolf on a burning street" width="480" height="600" loading="lazy"><h3>The Werewolf</h3><p>A fast hunter. It sprints in and slams, so keep moving.</p></figure>
+      <figure class="plate" tabindex="0"><img src="img/v2/boss_golem.jpg" alt="The Magma Golem, cracked with glowing lava" width="480" height="600" loading="lazy"><h3>Magma Golem</h3><p>Molten armour, slow and brutal. Bring armour-piercing rounds.</p></figure>
+      <figure class="plate" tabindex="0"><img src="img/v2/boss_yeti.jpg" alt="The white-furred Yeti" width="480" height="600" loading="lazy"><h3>The Yeti</h3><p>Huge reach. Its slam shakes the whole street.</p></figure>
+      <figure class="plate" tabindex="0"><img src="img/v2/boss_forest.jpg" alt="The Rotwood Behemoth, a hulking forest giant" width="480" height="600" loading="lazy"><h3>Rotwood Behemoth</h3><p>A rotwood giant that soaks up damage. Aim for the head.</p></figure>
+      <figure class="plate" tabindex="0"><img src="img/v2/boss_spider.jpg" alt="The Broodmother, a giant spider" width="480" height="600" loading="lazy"><h3>The Broodmother</h3><p>Low and wide: hard to miss, harder to kill.</p></figure>
+      <figure class="plate" tabindex="0"><img src="img/v2/boss_drake.jpg" alt="The Ash Drake, a spiked dragon" width="480" height="600" loading="lazy"><h3>Ash Drake</h3><p>A long body and an even longer health bar.</p></figure>
+    </div>
+  </div>
+</section>
+
+<svg class="flourish" viewBox="0 0 420 24" aria-hidden="true"><path d="M0 12h176M244 12h176" stroke="currentColor" stroke-width="1"/><path d="M210 2l10 10-10 10-10-10z" fill="none" stroke="currentColor"/><path d="M210 7l5 5-5 5-5-5z" fill="currentColor"/><circle cx="186" cy="12" r="2" fill="currentColor"/><circle cx="234" cy="12" r="2" fill="currentColor"/></svg>
+
+<section class="block" id="arsenal">
+  <div class="wrap">
+    <div class="arsenal">
+      <div>
+        <h2>Forge your arsenal</h2>
+        <p class="lead">Level every gun in the Gunsmith, fit the attachments that suit how you play, and earn finishes that show how far you have taken it.</p>
+        <dl>
+          <div><dt>54 guns</dt><dd>Rifles, SMGs, shotguns, snipers and pistols</dd></div>
+          <div><dt>40 attachments</dt><dd>Ten slots, up to five fitted at once</dd></div>
+          <div><dt>Levels 1–30</dt><dd>Each gun levels up as you use it</dd></div>
+          <div><dt>Element box</dt><dd>Fire, ice and lightning in the middle of the fight</dd></div>
+        </dl>
+      </div>
+      <div class="media"><img src="img/v2/gunsmith.jpg" alt="The Gunsmith: an M4 carbine with a holographic sight, laser and tactical suppressor" width="1280" height="720" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="maps">
+  <div class="wrap">
+    <div class="head">
+      <h2>Battlefields</h2>
+      <p class="lead">From a metro station cut into the bedrock to a harbour full of cranes.</p>
+    </div>
+    <div class="fields">
+      <figure class="field"><img src="img/fenixsl.jpg" alt="FenixSL: the platform and a wrecked train under a fiery painted vault" width="1280" height="720" loading="lazy"><figcaption><b>FenixSL</b><span>A metro station deep in the bedrock, painted in fire</span></figcaption></figure>
+      <figure class="field"><img src="img/v2/play_godstren.jpg" alt="Godstren at night with the element box in the middle" width="1280" height="720" loading="lazy"><figcaption><b>Godstren</b><span>A night-time city arena around the element box</span></figcaption></figure>
+      <figure class="field"><img src="img/souk.jpg" alt="Souk: market stalls and a stone well in narrow sunlit alleys" width="1280" height="720" loading="lazy"><figcaption><b>Souk</b><span>Tight market alleys built for 5v5</span></figcaption></figure>
+      <figure class="field"><img src="img/v2/play_5v5.jpg" alt="Dockyard: a gantry crane and shipping containers" width="1280" height="720" loading="lazy"><figcaption><b>Dockyard</b><span>Cranes, containers and long sightlines on the harbour</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<svg class="flourish" viewBox="0 0 420 24" aria-hidden="true"><path d="M0 12h176M244 12h176" stroke="currentColor" stroke-width="1"/><path d="M210 2l10 10-10 10-10-10z" fill="none" stroke="currentColor"/><path d="M210 7l5 5-5 5-5-5z" fill="currentColor"/><circle cx="186" cy="12" r="2" fill="currentColor"/><circle cx="234" cy="12" r="2" fill="currentColor"/></svg>
+
+<section class="block" id="client">
+  <div class="wrap">
+    <div class="head">
+      <h2>Start playing</h2>
+      <p class="lead">Play straight away in your browser, or install the Android client for full speed on your phone.</p>
+    </div>
+    <figure class="client-shot"><img src="img/v2/lobby.jpg" alt="The game's lobby with Play solo, 5v5 Multiplayer showing a Master rank badge, Co-op online, Gunsmith and the boss roster" width="1280" height="720" loading="lazy"><figcaption>The lobby: your loadout, your rank, daily ops and the next boss, all on one screen.</figcaption></figure>
+    <div class="altar" id="platforms">
+      <div id="plat-web">
+        <h3>In your browser</h3>
+        <p class="sub">Nothing to install. Best on a computer.</p>
+        <ul>
+          <li>Chrome, Edge or Firefox on Windows, Mac, Linux or a Chromebook</li>
+          <li>Move with <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>, aim with the mouse and fire with the left button. <kbd>R</kbd> reloads, <kbd>Q</kbd> swaps guns, <kbd>E</kbd> opens the element box, <kbd>V</kbd> changes the camera and <kbd>Esc</kbd> frees the mouse.</li>
+          <li>The first start downloads about 360 MB. Your browser keeps it, so the next start is quick.</li>
+          <li>Your progress is saved in the browser.</li>
+        </ul>
+        <a class="btn gold" href="play/">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+          Play now
+        </a>
+      </div>
+      <div id="plat-apk">
+        <h3>On Android</h3>
+        <p class="sub">Android 7 or newer, 64-bit. Installs over older versions and keeps your progress.</p>
+        <ol>
+          <li>Tap the download button and keep this page open until it finishes.</li>
+          <li>Open the file. If Android asks, allow <b>Install unknown apps</b> for your browser.</li>
+          <li>Tap <b>Install</b>, then open Zombie Outbreak V7.</li>
+        </ol>
+        <button class="btn gold" id="apk-btn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          <span id="apk-btn-label">Download the APK</span>
+        </button>
+        <div class="progress" id="apk-progress" aria-live="polite"><div class="bar"><div id="apk-bar"></div></div><p id="apk-label"></p></div>
         <details>
           <summary>Download not working?</summary>
-          <p>The app is stored in 4 parts. You can download them one by one (<a href="client/apk_part0.bin">part 1</a>, <a href="client/apk_part1.bin">part 2</a>, <a href="client/apk_part2.bin">part 3</a>, <a href="client/apk_part3.bin">part 4</a>) and join them. In Termux:</p>
+          <p>The app is stored in four parts. Download them one by one (<a href="client/apk_part0.bin">part 1</a>, <a href="client/apk_part1.bin">part 2</a>, <a href="client/apk_part2.bin">part 3</a>, <a href="client/apk_part3.bin">part 4</a>) and join them in Termux:</p>
           <pre>cd ~/storage/downloads
-cat apk_part0.bin apk_part1.bin apk_part2.bin apk_part3.bin &gt; ZombieOutbreak_V7.apk</pre>
-          <p>SHA-256: <code>8ccc4d1573815253266fa45595b567afd7a5ce6d01b5e9a224d6b73b36860067</code></p>
+cat apk_part0.bin apk_part1.bin apk_part2.bin apk_part3.bin &gt; ZombieOutbreak_V7.apk
+termux-open --content-type application/vnd.android.package-archive ZombieOutbreak_V7.apk</pre>
+          <p>Version <span class="ver">7.0 build 33</span>. SHA-256 of the joined APK: <code id="apk-sha">3a14352311e3e656f9c22b05850fea292eff700c88b0e5e7c9fc8aa3164703fe</code></p>
         </details>
       </div>
     </div>
   </div>
 </section>
 
-<section class="alt">
+<section class="block" id="updates">
   <div class="wrap">
-    <h2><small>Thank you</small>Credits</h2>
-    <div class="credits">
-      <p><b>"Zombie (Rigged &amp; Animated)"</b> by Aiden Studios &middot; <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> &middot; <a href="https://sketchfab.com/3d-models/zombie-rigged-animated-131688807ad444609ed9b2ed572dc4aa">source</a> &middot; used for the zombies</p>
-      <p><b>"CREATURE MONSTER 3D BY Oscar Creativo"</b> by OSCAR CREATIVO &middot; CC BY 4.0 &middot; <a href="https://sketchfab.com/3d-models/creature-monster-3d-by-oscar-creativo-03bff460ebdc4103b42a14d56131db78">source</a> &middot; resized for mobile</p>
-      <p><b>"werewolf"</b> by silvercrow101 &middot; CC BY 4.0 &middot; <a href="https://sketchfab.com/3d-models/werewolf-2dd83cb880f047d3bb2085f13e1efc08">source</a> &middot; reduced, recoloured, animations retargeted</p>
-      <p><b>"Yeti"</b> by orioltron &middot; CC BY 4.0 &middot; <a href="https://sketchfab.com/3d-models/yeti-daa4e743128f44c7859c5c34588518a7">source</a> &middot; rigged onto the werewolf skeleton</p>
-      <p><b>Public domain (CC0):</b> Stein Games weapons pack; Quaternius guns, spider and animation library; Flat Guns (OpenGameArt); Lava Golem by gavlig; Forest Monster by CDmir; Cethiel's Dragon by Drummyfish; textures and props from Poly Haven and ambientCG; boss conversions from the ymmo project.</p>
-      <p><b>"Giang 20" toad monster</b> by asset-animated (CGTrader, Royalty Free licence).</p>
-      <p><b>"Military zombie set 3"</b> by dima-dyl (CGTrader, Royalty Free licence) &middot; the regular zombies.</p>
-      <p>Made with the <a href="https://godotengine.org">Godot Engine</a> (MIT licence). The full list of credits is in the game: tap <b>CREDITS</b> in the lobby.</p>
+    <div class="head">
+      <h2>Recent updates</h2>
+    </div>
+    <ol class="timeline">
+      <li><h3>Build 33</h3><time datetime="2026-11-09">9 November 2026</time><p>Ranked rebuilt in the style of CoD Mobile: seven ranks with their own badges, Rank Points for your place in the team, MVP and streaks, promotion shields, two-month series with rewards, and bots that match your rank.</p></li>
+      <li><h3>Build 32</h3><time datetime="2026-11-08">8 November 2026</time><p>Survival waves now run on a timer. Bigger hordes with every zombie type from the early waves, zombies that find their way around walls and stairs, and spawns that come from out of sight.</p></li>
+      <li><h3>Build 31</h3><time datetime="2026-11-08">8 November 2026</time><p>A new map, FenixSL: a cave metro station with a wrecked train you can walk through, escalators up to a ticket hall and flickering lights.</p></li>
+      <li><h3>Build 30</h3><time datetime="2026-11-08">8 November 2026</time><p>New military zombies, the public edition and the browser version you can play on this site.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="block" id="faq">
+  <div class="wrap">
+    <div class="head"><h2>Questions</h2></div>
+    <div class="faq">
+      <details><summary>Is it free?</summary><p>Yes. There is nothing to buy. Parts, the in-game currency, are earned by playing.</p></details>
+      <details><summary>Do I need an account?</summary><p>No. Pick a survivor name and play. Progress is saved on your phone, or in your browser for the web version.</p></details>
+      <details><summary>Can I play with friends?</summary><p>Yes. On the same Wi-Fi, one player hosts and the others join by IP. Worldwide online rooms are being set up. Until they are live, 5v5 matches fill the empty slots with bots.</p></details>
+      <details><summary>Android warns about an unknown app. Is that normal?</summary><p>Yes. The game is not on Google Play, so Android asks once whether your browser may install apps. Every release is signed with the same key, so updates install over the old version.</p></details>
+      <details><summary>Will an update wipe my progress?</summary><p>No. A new version installs over the old one and keeps your guns, levels and rank.</p></details>
     </div>
   </div>
 </section>
 
+<section class="block" id="credits">
+  <div class="wrap">
+    <div class="head"><h2>Credits</h2></div>
+    <div class="credits">
+      <p><b>"Zombie (Rigged &amp; Animated)"</b> by Aiden Studios, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> (<a href="https://sketchfab.com/3d-models/zombie-rigged-animated-131688807ad444609ed9b2ed572dc4aa">source</a>), used for zombies.</p>
+      <p><b>"CREATURE MONSTER 3D BY Oscar Creativo"</b> by OSCAR CREATIVO, CC BY 4.0 (<a href="https://sketchfab.com/3d-models/creature-monster-3d-by-oscar-creativo-03bff460ebdc4103b42a14d56131db78">source</a>), resized for mobile.</p>
+      <p><b>"werewolf"</b> by silvercrow101, CC BY 4.0 (<a href="https://sketchfab.com/3d-models/werewolf-2dd83cb880f047d3bb2085f13e1efc08">source</a>), reduced, recoloured and with retargeted animations.</p>
+      <p><b>"Yeti"</b> by orioltron, CC BY 4.0 (<a href="https://sketchfab.com/3d-models/yeti-daa4e743128f44c7859c5c34588518a7">source</a>), rigged onto the werewolf skeleton.</p>
+      <p><b>Public domain (CC0):</b> Stein Games weapons pack; Quaternius guns, spider and animation library; Flat Guns (OpenGameArt); Lava Golem by gavlig; Forest Monster by CDmir; Cethiel's Dragon by Drummyfish; textures and props from Poly Haven and ambientCG; boss conversions from the ymmo project.</p>
+      <p><b>"Giang 20" toad monster</b> by asset-animated (CGTrader, Royalty Free licence).</p>
+      <p><b>"Military zombie set 3"</b> by dima-dyl (CGTrader, Royalty Free licence), the regular zombies.</p>
+      <p><b>Fonts on this site:</b> Grenze Gotisch by Omnibus-Type and Alegreya Sans by Juan Pablo del Peral (HT Fonts), both under the <a href="fonts/OFL-GrenzeGotisch.txt">SIL Open Font Licence</a>.</p>
+      <p>Made with the <a href="https://godotengine.org">Godot Engine</a> (MIT licence). The full list is in the game under Credits in the lobby.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
 <footer>
-  <div class="wrap">Zombie Outbreak V7 &middot; Public edition &middot; free to play. Not affiliated with any other game of a similar name.</div>
+  <div class="wrap">
+    <span>Zombie Outbreak V7, public edition. Free to play.</span>
+    <span>Not affiliated with any other game of a similar name.</span>
+  </div>
 </footer>
 
 <script>
-// Put the right button first: phones/tablets -> Android client, computers -> browser.
+// Top bar turns solid once you scroll; the menu button opens the links on small screens.
 (function () {
-  const ua = navigator.userAgent || "";
-  const isAndroid = /Android/i.test(ua);
-  const play = document.getElementById("cta-play"), apk = document.getElementById("cta-apk");
-  if (isAndroid) {
-    apk.classList.add("primary");
-    apk.parentNode.insertBefore(apk, play);
-    const web = document.getElementById("plat-web"), app = document.getElementById("plat-apk");
-    app.parentNode.insertBefore(app, web);
-  } else {
-    play.classList.add("primary");
-  }
+  const nav = document.getElementById("nav"), btn = document.getElementById("menu-btn"), menu = document.getElementById("menu");
+  const onScroll = () => nav.classList.toggle("solid", window.scrollY > 40);
+  onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
+  btn.addEventListener("click", () => {
+    const open = menu.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    btn.textContent = open ? "Close" : "Menu";
+  });
+  menu.addEventListener("click", (e) => {
+    if (e.target.tagName === "A") { menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); btn.textContent = "Menu"; }
+  });
 })();
 
-// The APK is stored as 3 parts (GitHub Pages allows files up to 100 MB). Download them, join them in
+// Embers rising over the burning city (paused off screen and for reduced motion).
+(function () {
+  const cv = document.getElementById("embers");
+  if (!cv || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const ctx = cv.getContext("2d");
+  let w = 0, h = 0, dpr = 1, run = true, parts = [];
+  const sprite = document.createElement("canvas"); sprite.width = sprite.height = 32;
+  const sc = sprite.getContext("2d"), g = sc.createRadialGradient(16, 16, 0, 16, 16, 16);
+  g.addColorStop(0, "rgba(255,236,190,1)"); g.addColorStop(.25, "rgba(255,170,70,.9)"); g.addColorStop(.6, "rgba(255,90,20,.35)"); g.addColorStop(1, "rgba(255,60,10,0)");
+  sc.fillStyle = g; sc.fillRect(0, 0, 32, 32);
+  function spawn(fresh) {
+    return { x: Math.random() * w, y: fresh ? Math.random() * h : h + 20, r: 2 + Math.random() * 5, vy: 18 + Math.random() * 46,
+             vx: -6 + Math.random() * 12, ph: Math.random() * 6.28, life: 0, max: 5 + Math.random() * 7 };
+  }
+  function size() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = cv.clientWidth; h = cv.clientHeight; cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = w < 700 ? 34 : 70;
+    parts = Array.from({ length: n }, () => spawn(true));
+  }
+  let last = performance.now();
+  function frame(t) {
+    const dt = Math.min(.05, (t - last) / 1000); last = t;
+    ctx.clearRect(0, 0, w, h); ctx.globalCompositeOperation = "lighter";
+    for (const p of parts) {
+      p.life += dt; p.y -= p.vy * dt; p.x += (p.vx + Math.sin(p.ph + p.life * 1.6) * 14) * dt;
+      const fade = Math.min(1, p.life / .8) * Math.max(0, 1 - p.life / p.max);
+      if (p.y < -20 || p.life > p.max) Object.assign(p, spawn(false));
+      ctx.globalAlpha = fade * .85; const s = p.r * 2.4; ctx.drawImage(sprite, p.x - s / 2, p.y - s / 2, s, s);
+    }
+    ctx.globalAlpha = 1;
+    if (run) requestAnimationFrame(frame);
+  }
+  size(); window.addEventListener("resize", size);
+  new IntersectionObserver((es) => {
+    const vis = es[0].isIntersecting && !document.hidden;
+    if (vis && !run) { run = true; last = performance.now(); requestAnimationFrame(frame); } else if (!vis) run = false;
+  }).observe(cv);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && !run) { run = true; last = performance.now(); requestAnimationFrame(frame); } });
+  requestAnimationFrame(frame);
+})();
+
+// Android phones get the Android download as the main button.
+(function () {
+  if (!/Android/i.test(navigator.userAgent || "")) return;
+  const play = document.getElementById("cta-play"), apk = document.getElementById("cta-apk");
+  play.classList.replace("gold", "line"); apk.classList.replace("line", "gold");
+  apk.parentNode.insertBefore(apk, play);
+  const web = document.getElementById("plat-web"), app = document.getElementById("plat-apk");
+  app.parentNode.insertBefore(app, web);
+  app.style.borderLeft = "0"; web.style.borderLeft = "1px solid rgba(240,181,74,.14)";
+})();
+
+// The APK is stored in parts (GitHub Pages allows files up to 100 MB). Download them, join them in
 // the browser and save the result as one .apk file.
 (function () {
   const PARTS = [["client/apk_part0.bin", 99614720], ["client/apk_part1.bin", 99614720], ["client/apk_part2.bin", 99614720], ["client/apk_part3.bin", 65172543]];
   const TOTAL = PARTS.reduce((a, p) => a + p[1], 0);
-  const btn = document.getElementById("apk-btn");
+  const MB = (TOTAL / 1048576).toFixed(0) + " MB";
+  const btn = document.getElementById("apk-btn"), btnLabel = document.getElementById("apk-btn-label");
   const box = document.getElementById("apk-progress"), bar = document.getElementById("apk-bar"), label = document.getElementById("apk-label");
+  btnLabel.textContent = "Download the APK (" + MB + ")";
+  document.getElementById("cta-apk-size").textContent = "The full game, " + MB;
   let busy = false, saved = null;
   function save(url) {
     const a = document.createElement("a");
@@ -270,7 +619,7 @@ cat apk_part0.bin apk_part1.bin apk_part2.bin apk_part3.bin &gt; ZombieOutbreak_
     let done = 0;
     const show = () => {
       bar.style.width = (100 * done / TOTAL).toFixed(1) + "%";
-      label.textContent = "Downloading " + (done / 1048576).toFixed(0) + " / " + (TOTAL / 1048576).toFixed(0) + " MB - keep this page open";
+      label.textContent = "Downloading " + (done / 1048576).toFixed(0) + " of " + MB + ". Keep this page open.";
     };
     try {
       const blobs = [];
@@ -287,7 +636,7 @@ cat apk_part0.bin apk_part1.bin apk_part2.bin apk_part3.bin &gt; ZombieOutbreak_
               if (end) break;
               chunks.push(value); got += value.length; done += value.length; show();
             }
-            if (got !== size) throw new Error("incomplete part");
+            if (got !== size) throw new Error("a part arrived incomplete");
             break;
           } catch (e) {
             done -= got; show();
@@ -300,11 +649,11 @@ cat apk_part0.bin apk_part1.bin apk_part2.bin apk_part3.bin &gt; ZombieOutbreak_
       const blob = new Blob(blobs, { type: "application/vnd.android.package-archive" });
       saved = URL.createObjectURL(blob);
       bar.style.width = "100%";
-      label.textContent = "Done! Saving ZombieOutbreak_V7.apk - open it from your downloads to install.";
-      btn.disabled = false; btn.innerHTML = "&#8681;&nbsp; Save APK again";
+      label.textContent = "Done. ZombieOutbreak_V7.apk is in your downloads: open it to install.";
+      btn.disabled = false; btnLabel.textContent = "Save the APK again";
       save(saved);
     } catch (e) {
-      label.textContent = "Download failed (" + e.message + "). Check your connection and try again, or use the parts below.";
+      label.textContent = "The download stopped (" + e.message + "). Check your connection and tap the button again, or use the four parts below.";
       btn.disabled = false;
     }
     busy = false;
