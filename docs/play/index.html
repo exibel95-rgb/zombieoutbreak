@@ -48,7 +48,7 @@ a.back { position: fixed; top: 12px; left: 16px; color: var(--muted); font-size:
 // V7_WEB_1: the game pack is split into parts under 100 MB (GitHub Pages limit). They are downloaded,
 // kept in the browser's Cache Storage for the next visit, joined in memory and handed to the engine.
 const BUILD = 30;
-const PCK_PARTS = [["pck/part0.bin", 99614720], ["pck/part1.bin", 99614720], ["pck/part2.bin", 99614720], ["pck/part3.bin", 37136464]];
+const PCK_PARTS = [["pck/part0.bin", 99614720], ["pck/part1.bin", 99614720], ["pck/part2.bin", 99614720], ["pck/part3.bin", 37603224]];
 const PCK_TOTAL = PCK_PARTS.reduce((a, p) => a + p[1], 0);
 const WASM_SIZE = 39514754;
 const CACHE_NAME = "zo-v7-pck-" + BUILD + "-" + PCK_TOTAL;
